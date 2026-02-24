@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class inmobilariaController extends Controller
 {
+    /* Porcesaro texto e imagenes para la generación de ficha */
    public function procesarFicha(Request $request){
         $descripcionUsuario = $request->input('descripcion');
         $archivos = $request->file('imagenes');
@@ -24,7 +25,7 @@ class inmobilariaController extends Controller
         // Agregamos las imágenes
         if ($request->hasFile('imagenes')) {
             foreach ($archivos as $archivo) {
-                $base64 = base64_encode(file_get_contents($archivo));
+                $base64 = base64_encode($archivo->get());
                 $contenidoUsuario[] = [
                     "type" => "image_url",
                     "image_url" => [
@@ -66,7 +67,7 @@ class inmobilariaController extends Controller
 
         $response = Http::withToken(env('OPENAI_API_KEY'))
             ->post('https://api.openai.com/v1/chat/completions', [
-                'model' => 'gpt-4o-mini', // Cambia aquí
+                'model' => 'gpt-4o-mini', 
                 'messages' => [
                     ['role' => 'system', 'content' => $promptSistema],
                     ['role' => 'user', 'content' => $contenidoUsuario]

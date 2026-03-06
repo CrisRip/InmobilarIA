@@ -86,6 +86,18 @@ class inmobilariaController extends Controller
         return response()->json(json_decode($data['choices'][0]['message']['content']));
     }
 
+    public function home()
+    {
+        // obtenemos subdirectorios bajo 'casas'
+        $dirs = Storage::disk('r2')->directories('casas');
+        // eliminamos el prefijo "casas/" para mostrar sólo el nombre
+        $dirs = collect($dirs)->map(fn($p) => Str::after($p, 'casas/'))->toArray();
+
+        return view('welcome', [
+            'directories' => $dirs,
+        ]);
+    }
+
     public function directory(Request $request){
         $request->validate([
             'title' => 'required|string|max:255',

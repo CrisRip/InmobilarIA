@@ -20,3 +20,4 @@ Route::get('/', function () {
 
 Route::post('/procesar-ficha', [App\Http\Controllers\inmobilariaController::class, 'procesarFicha'])->name('procesar');
 Route::post('/generar-ficha', [App\Http\Controllers\fichaController::class, 'generar'])->name('generar');
+Route::post('/crear-directorio', [App\Http\Controllers\inmobilariaController::class, 'directory'])->name('crear-directorio');

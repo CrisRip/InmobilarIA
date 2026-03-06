@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class inmobilariaController extends Controller
 {
@@ -83,4 +85,20 @@ class inmobilariaController extends Controller
 
         return response()->json(json_decode($data['choices'][0]['message']['content']));
     }
+
+    public function directory(Request $request){
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
+
+        $carpeta = strtoupper($request->title);
+        $ruta = "casas/{$carpeta}/.keep";
+
+
+        Storage::disk('r2')->put($ruta,'');
+
+        return redirect()->back()->with('success',"Archivo subido a la carpeta virtual"); 
+    }
+
+
 }

@@ -197,11 +197,50 @@
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
                 Generar Ficha Inteligente
             </button>
+
+            
         </form>
+
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
+
+            <form action="{{ route('crear-directorio') }}" method="POST" style="gap: 0.8rem;">
+                @csrf
+
+                <div class="input-group">
+
+                    <label for="title">Nuevo Directorio</label>
+
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" name="title" id="title" placeholder="Nombre de la carpeta..." 
+                            style="flex: 1; 
+                                   padding: 10px; 
+                                   border: 2px solid #e2e8f0; 
+                                   border-radius: 10px; 
+                                   font-size: 0.9rem;
+                                   outline: none;
+                                   transition: border-color 0.2s;"
+                            onfocus="this.style.borderColor='var(--primary)'"
+                            onblur="this.style.borderColor='#e2e8f0'">
+                            @error('title')<span style=""color: #ef4444; font-size: 0.75rem; margin-top: 4px;> {{$message}} </span>@enderror
+                        
+                        <button type="submit" 
+                            style="background-color: #64748b; padding: 10px 15px; font-size: 0.85rem; white-space: nowrap;">
+                            <i class="fa-solid fa-folder-plus"></i>
+                            Crear
+                        </button>
+                        @if(session('success'))
+                            <span style="color: #22c55e; font-size: 0.75rem; margin-top: 4px;"> {{ session('success') }} </span>
+                        @endif
+
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
+
     <script>
-        function updateFileName(input) {
+        function updateFileName(inp ut) {
             const label = document.getElementById('file-label-text');
             if (input.files && input.files.length > 0) {
                 label.innerHTML = `<i class="fa-solid fa-file-circle-check"></i> <span>${input.files.length} archivo(s) seleccionado(s)</span>`;

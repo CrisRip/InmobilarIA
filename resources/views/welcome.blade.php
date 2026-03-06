@@ -236,14 +236,91 @@
                 </div>
             </form>
         </div>
+
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
+            <form action="{{ route('images.upload') }}" method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 1rem;">
+                @csrf
+
+                <div class="input-group">
+                    <label for="directory">Selecciona directorio</label>
+                    <select name="title" id="directory" 
+                        style="padding: 10px; 
+                               border: 2px solid #e2e8f0; 
+                               border-radius: 10px; 
+                               font-size: 0.9rem;
+                               outline: none;
+                               transition: border-color 0.2s;"
+                        onfocus="this.style.borderColor='var(--primary)'"
+                        onblur="this.style.borderColor='#e2e8f0'">
+                        <option value="">-- Selecciona un directorio --</option>
+                        @foreach($directories ?? [] as $dir)
+                            <option value="{{ $dir }}">{{ $dir }}</option>
+                        @endforeach
+                    </select>
+                    @error('title')<span style="color: #ef4444; font-size: 0.75rem; margin-top: 4px;"> {{$message}} </span>@enderror
+                </div>
+
+                <div class="input-group">
+                    <label for="filename">Nombre del archivo (sin extensión)</label>
+                    <input type="text" name="filename" id="filename" placeholder="ej: foto_principal_salon" 
+                        style="padding: 10px; 
+                               border: 2px solid #e2e8f0; 
+                               border-radius: 10px; 
+                               font-size: 0.9rem;
+                               outline: none;
+                               transition: border-color 0.2s;"
+                        onfocus="this.style.borderColor='var(--primary)'"
+                        onblur="this.style.borderColor='#e2e8f0'">
+                    <small style="color: #64748b; margin-top: 4px;">Solo letras, números, guiones y guiones bajos</small>
+                    @error('filename')<span style="color: #ef4444; font-size: 0.75rem; margin-top: 4px;"> {{$message}} </span>@enderror
+                </div>
+
+                <div class="input-group">
+                    <label>Subir imagen a R2</label>
+                    <div class="file-upload" onclick="document.getElementById('imageR2').click()">
+                        <input type="file" name="image" id="imageR2" accept="image/*" onchange="updateR2FileName(this)">
+                        <div class="file-label" id="file-label-r2">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Haz clic para subir imagen</span>
+                            <small>(JPEG, PNG, JPG, WebP - máx 5MB)</small>
+                        </div>
+                    </div>
+                    @error('image')<span style="color: #ef4444; font-size: 0.75rem; margin-top: 4px;"> {{$message}} </span>@enderror
+                </div>
+
+                <button type="submit" style="background-color: #10b981;">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    Subir a R2
+                </button>
+
+                @if(session('image_success'))
+                    <div style="padding: 12px; background-color: #dcfce7; border: 1px solid #22c55e; border-radius: 8px; color: #166534; font-size: 0.85rem;">
+                        <i class="fa-solid fa-check-circle"></i> {{ session('image_success') }}
+                    </div>
+                @endif
+
+                @if(session('image_error'))
+                    <div style="padding: 12px; background-color: #fee2e2; border: 1px solid #ef4444; border-radius: 8px; color: #991b1b; font-size: 0.85rem;">
+                        <i class="fa-solid fa-exclamation-circle"></i> {{ session('image_error') }}
+                    </div>
+                @endif
+            </form>
+        </div>
     </div>
 
 
     <script>
-        function updateFileName(inp ut) {
+        function updateFileName(input) {
             const label = document.getElementById('file-label-text');
             if (input.files && input.files.length > 0) {
                 label.innerHTML = `<i class="fa-solid fa-file-circle-check"></i> <span>${input.files.length} archivo(s) seleccionado(s)</span>`;
+            }
+        }
+
+        function updateR2FileName(input) {
+            const label = document.getElementById('file-label-r2');
+            if (input.files && input.files.length > 0) {
+                label.innerHTML = `<i class="fa-solid fa-file-circle-check"></i> <span>${input.files[0].name}</span>`;
             }
         }
     </script>

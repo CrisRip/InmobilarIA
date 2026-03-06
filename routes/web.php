@@ -13,11 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-
-});
+Route::get('/', [App\Http\Controllers\inmobilariaController::class, 'home']);
 
 Route::post('/procesar-ficha', [App\Http\Controllers\inmobilariaController::class, 'procesarFicha'])->name('procesar');
 Route::post('/generar-ficha', [App\Http\Controllers\fichaController::class, 'generar'])->name('generar');
 Route::post('/crear-directorio', [App\Http\Controllers\inmobilariaController::class, 'directory'])->name('crear-directorio');
+Route::post('/upload-image', [App\Http\Controllers\ImageController::class, 'uploadImage'])->name('images.upload');
